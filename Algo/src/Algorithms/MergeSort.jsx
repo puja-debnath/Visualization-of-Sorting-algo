@@ -1,42 +1,49 @@
-export const getMergeSortAnimations = (arr) => {
-  const animations = [];
-  if (arr.length <= 1) {
-    return arr;
+export function getMergeSortAnimations(array) {
+  const animation = []; //for visualization
+  if (array.length <= 1) {
+    return array;
   }
-  const auxiliaryArray = arr.slice();
-  MergeSort(arr, 0, arr.length - 1, animations, auxiliaryArray);
-  return animations;
-};
-function MergeSort(arr, start, end, animations, sort) {
-  const mid = math.floor((start + end) / 2);
-  const left = MergeSort(arr, start, mid, animations, sort);
-  const right = MergeSort(arr, mid + 1, end, animations, sort);
-  doMerge(arr, left, right);
+  const ShallowArray = array.slice(); //copy of array to perform operations
+  MergeSort(array, 0, array.length - 1, ShallowArray, animation);
 }
-function doMerge(left, right) {
-  const mix = new Array(left.length + right.length);
-  let i = 0;
-  let k = 0;
-  let j = 0;
-  while (i < left.length && j < right.length) {
-    if (left[i] < right[j]) {
-      mix[k] = left[i];
-      i++;
+
+function MergeSort(MainArray, start, end, ShallowArray, animation) {
+  if (start === end) {
+    return;
+  }
+  const middle = Math.floor(start + end) / 2;
+  MergeSort(ShallowArray, start, middle, MainArray, animation); //shallow came first to perform operation on it
+  MergeSort(ShallowArray, middle + 1, end, MainArray, animation); //mainarray will ne unchanged
+  DoMergeSort(MainArray, start, middle, end, ShallowArray, animation);
+}
+
+function DoMergeSort(MainArray, start, middle, end, ShallowArray, animation) {
+  let k = start; // for mainArray
+  let i = start; // fro left array
+  let j = middle + 1; // for right array
+  while (i < middle && j < end) {
+    // These are the values that we're comparing; we push them once to change their color.
+    animation.push([i, j]);
+    //These are the values that we're comparing; we push them a second time to revert their color.
+    animation.push([i, j]);
+    if (ShallowArray[i] < ShallowArray[j]) {
+      animation.push([k, ShallowArray[i]]);
+      MainArray[k++] = ShallowArray[i++];
     } else {
-      mix[k] = right[j];
-      j++;
+      animation.push([k, ShallowArray[j]]);
+      MainArray[k++] = ShallowArray[j++];
     }
-    k++;
+    while (i < middle) {
+      animation.push([i, j]);
+      animation.push([i, j]);
+      animation.push([k, ShallowArray[i]]);
+      MainArray[k++] = ShallowArray[i++];
+    }
+    while (j < end) {
+      animation.push([i, j]);
+      animation.push([i, j]);
+      animation.push([k, ShallowArray[j]]);
+      MainArray[k++] = ShallowArray[j++];
+    }
   }
-  while (i < left.length) {
-    mix[k] = left[i];
-    i++;
-    k++;
-  }
-  while (j < right.length) {
-    mix[k] = right[j];
-    j++;
-    k++;
-  }
-  return mix;
 }
