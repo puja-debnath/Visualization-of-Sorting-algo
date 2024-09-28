@@ -2,6 +2,7 @@
 //add key while putting value makes it easier to understand
 
 import React from "react";
+import getMergeSortAnimations from "../Algorithms/MergeSort.jsx";
 // Change this value for the speed of the animations.
 const ANIMATION_SPEED_MS = 1;
 
@@ -34,7 +35,7 @@ export default class SortingVisualizer extends React.Component {
   mergeSort() {
     const animation = getMergeSortAnimations(this.state.array); //passing current array as argument
     for (let i = 0; i < animation.length; i++) {
-      const Arraybar = Document.getElementByClassName("kjadfgkj");
+      const Arraybar = <div className="inline-block m-0.5 w-2"></div>;
       const isColorChange = i % 3 !== 2;
       if (isColorChange) {
         const [barOne, barTwo] = animation[i];
@@ -49,16 +50,17 @@ export default class SortingVisualizer extends React.Component {
     }
   }
 
-  testSortingAlgorithms(){
-    for(let i = 0 ; i< 100 ; i++){
-      const array = []
-      const length = randomIntFromInterval(1,1000)
-      for(let i = 0 ; i< length ; i++){
-        array.push(-1000, 1000)
+  testSortingAlgorithms() {
+    for (let i = 0; i < 100; i++) {
+      const array = [];
+      const length = randomIntFromInterval(1, 1000);
+      for (let i = 0; i < length; i++) {
+        array.push(-1000, 1000);
       }
-      const javaScriptSortedArray = array.slice().sort((a,b) => a - b)
+      const javaScriptSortedArray = array.slice().sort((a, b) => a - b);
       const mergeSortedArray = getMergeSortAnimations(array.slice());
       console.log(arraysAreEqual(javaScriptSortedArray, mergeSortedArray));
+      //jgjhgjhhjjg
     }
   }
   render() {
@@ -69,11 +71,8 @@ export default class SortingVisualizer extends React.Component {
       <div className="absolute left-20">
         {array.map((value, idx) => (
           <div
-            className="inline-block m-0.5 w-2 bg-pink-700"
+            className={`inline-block m-0.5 w-2 bg-pink-700 h-[${value}]`}
             key={idx} // keys helps React identify which items have changed, are added, or are removed.
-            style={{
-              height: `${value}px`,
-            }}
           ></div>
         ))}
 
@@ -86,6 +85,7 @@ export default class SortingVisualizer extends React.Component {
           {" "}
           Generate new array{" "}
         </button>
+
         <button onClick={() => this.mergeSort()}>Merge Sort</button>
       </div>
     );
@@ -94,4 +94,16 @@ export default class SortingVisualizer extends React.Component {
 
 function randomIntFromInterval(max, min) {
   return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function arraysAreEqual(arr1, arr2) {
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+  return true;
 }
